@@ -1,6 +1,8 @@
 # NodeMCU-Dual-Pulse-Weld-Timer
 Code for NodeMCU based double-pulse battery tab welder
 
+This is the code to go along with the video about the project at https://www.youtube.com/edit?o=U&video_id=5kWRZHLDFLo
+
 This code is most horrendous
 I don't know LUA and I was too lazy to find out
 
