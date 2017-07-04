@@ -112,7 +112,6 @@ init_OLED(sda,scl)
 print_OLED() 
 
 gpio.trig(zap_pin, "down", function (level, when)
---   top_line("ADC: " .. adc.read(0))
    local delta = when - last_zap
    if delta < 0 then delta = delta + 2147483647 end;
    if delta > debounce_delay then
@@ -124,7 +123,9 @@ gpio.trig(zap_pin, "down", function (level, when)
       bothus = ((pulse1+pulse2)*1000)-750
       delayus = (delay*1000) 
       if pulse1 == 0 and pulse2 == 0 then -- Do nothing
-        top_line("No Zap...")       
+        top_line("No Zap...")
+      elseif adc.read(0) > 804 then -- Over Temperature... around 40C to be on the safe side for now
+       top_line("Too Hot: " .. math.floor((adc.read(0)-84)/18) .. "C")      
       elseif pulse2 == 0 then -- Only do pulse1
         top_line("Zap Pulse1...")
         gpio.write(relay_pin, gpio.HIGH)
