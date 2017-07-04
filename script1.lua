@@ -23,14 +23,14 @@ str1_sep = "*"
 str2_sep = ":"
 str3_sep = ":"
 zap_pin = 4
+relay_pin=8
 last_zap = 0
 debounce_delay = 1000000 -- 1-second re-trigger delay
-relay_pin=3
 
  -- turn off the SSR at start in case we are recovering from a crash
 gpio.mode(zap_pin, gpio.INPUT, gpio.PULLUP)
 gpio.mode(relay_pin, gpio.OUTPUT)
-gpio.write(relay_pin, gpio.HIGH)
+gpio.write(relay_pin, gpio.LOW)
 
 adc.force_init_mode(adc.INIT_ADC) -- Set ADC to read from input pin, rather than VDD
 
@@ -127,28 +127,28 @@ gpio.trig(zap_pin, "down", function (level, when)
         top_line("No Zap...")       
       elseif pulse2 == 0 then -- Only do pulse1
         top_line("Zap Pulse1...")
-        gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(pulse1us)
         gpio.write(relay_pin, gpio.HIGH)
+        tmr.delay(pulse1us)
+        gpio.write(relay_pin, gpio.LOW)
       elseif pulse1 == 0 then -- Only do pulse2
         top_line("Zap Pulse2...")
-        gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(pulse2us)
         gpio.write(relay_pin, gpio.HIGH)
+        tmr.delay(pulse2us)
+        gpio.write(relay_pin, gpio.LOW)
       elseif delay == 0 then -- Add pulse1+pulse2 into single longer pulse
         top_line("Zap Pulse1+2...")
-        gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(bothus)
         gpio.write(relay_pin, gpio.HIGH)
+        tmr.delay(bothus)
+        gpio.write(relay_pin, gpio.LOW)
       else  -- Double-zap cycle - pulse1, delay, pulse2
         top_line("Double Zap...")
-        gpio.write(relay_pin, gpio.LOW)
+        gpio.write(relay_pin, gpio.HIGH)
         tmr.delay(pulse1us)
-        gpio.write(relay_pin, gpio.HIGH)
-        tmr.delay(delayus)
         gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(pulse2us)
+        tmr.delay(delayus)
         gpio.write(relay_pin, gpio.HIGH)
+        tmr.delay(pulse2us)
+        gpio.write(relay_pin, gpio.LOW)
       end
       print_OLED()
     end
