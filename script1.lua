@@ -118,32 +118,36 @@ gpio.trig(zap_pin, "down", function (level, when)
    if delta > debounce_delay then
     last_zap = when
     if level == 0 then
-      -- Keeping the if statements outside the timing loop complicates the code, but gives more accurate timings. 
+      -- Keeping the if statements outside the timing loop complicates the code, but gives more accurate timings.
+      pulse1us = (pulse1*1000)-750
+      pulse2us = (pulse2*1000)-750
+      bothus = ((pulse1+pulse2)*1000)-750
+      delayus = (delay*1000) 
       if pulse1 == 0 and pulse2 == 0 then -- Do nothing
         top_line("No Zap...")       
       elseif pulse2 == 0 then -- Only do pulse1
         top_line("Zap Pulse1...")
         gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(pulse1*1000)
+        tmr.delay(pulse1us)
         gpio.write(relay_pin, gpio.HIGH)
       elseif pulse1 == 0 then -- Only do pulse2
         top_line("Zap Pulse2...")
         gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(pulse2*1000)
+        tmr.delay(pulse2us)
         gpio.write(relay_pin, gpio.HIGH)
       elseif delay == 0 then -- Add pulse1+pulse2 into single longer pulse
         top_line("Zap Pulse1+2...")
         gpio.write(relay_pin, gpio.LOW)
-        tmr.delay((pulse1+pulse2)*1000)
+        tmr.delay(bothus)
         gpio.write(relay_pin, gpio.HIGH)
       else  -- Double-zap cycle - pulse1, delay, pulse2
         top_line("Double Zap...")
         gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(pulse1*1000)
+        tmr.delay(pulse1us)
         gpio.write(relay_pin, gpio.HIGH)
-        tmr.delay(delay*1000)
+        tmr.delay(delayus)
         gpio.write(relay_pin, gpio.LOW)
-        tmr.delay(pulse2*1000)
+        tmr.delay(pulse2us)
         gpio.write(relay_pin, gpio.HIGH)
       end
       print_OLED()
