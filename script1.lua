@@ -1,15 +1,11 @@
--- OLED Display demo
--- March, 2016 
--- @kayakpete | pete@hoffswell.com
--- Hardware: 
---   ESP-12E Devkit
---   4 pin I2C OLED 128x64 Display Module
+-- Dual pulse battery tab spot welder project
+
 -- Connections:
---   ESP  --  OLED
---   3v3  --  VCC
---   GND  --  GND
---   D1   --  SDA
---   D2   --  SCL
+--   OLED Display attached to SDA->D1,SCL->D2
+--   Solid State Relay on D8, with NPN transistor to allow 5V switching across SSR
+--   Microswitch on D4 to trigger weld cycle
+--   Rotary encoder on CLK->D5, DT->D6, SW->D7
+--   NTC Thermistor on A0 for over-temperature detection.
 
 -- Variables 
 sda = 1 -- SDA Pin
